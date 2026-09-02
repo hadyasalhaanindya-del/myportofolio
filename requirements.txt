@@ -1,5 +1,7 @@
-django~=6.0
+django
 gunicorn
 psycopg2-binary
 python-dotenv
 whitenoise
+requests
+urllib3
