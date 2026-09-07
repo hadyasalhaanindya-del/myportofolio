@@ -92,12 +92,14 @@ h1, .brand {
 
 .hero-identity h1 {
     font-size: clamp(3rem, 7vw, 5rem);
+    font-family: "Space Grotesk", sans-serif;
     line-height: 0.95;
     color: var(--accent)
 }
 
 .hadya-font {
     font-family: "Bonbon", sans-serif;
+    color:var(--ink)
 }
 
 .bio {
@@ -156,22 +158,30 @@ h1, .brand {
 }
 
 .education h1 {
-    font-size: 1rem;
-    margin-bottom: 8px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
 }
 
 .education h2 {
-    font-size: 0.75rem;
-    margin-top: 5px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1rem;
+    margin-top: 12px;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .education h2 span {
-    float: right;
+    font-size: 0.8rem;
     font-weight: normal;
 }
 
 .education p {
-    margin-top: 3px;
+    font-size: 0.8rem;
+    margin-top: 0;
+    margin-bottom: 8px;
 }
 
 .hero-photo {
@@ -228,4 +238,4 @@ h1, .brand {
     }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Bonbon&display=swap');
+
