@@ -76,31 +76,30 @@ h1, .brand {
 }
 
 
-.hero-photo {
-    grid-area: photo;
-    position: relative;
-
-    width: 340px;
-    height: 360px;
-    margin-top: -1rem;
+.hero-photo { 
+    grid-area: photo; 
+    position: relative; 
+    width: 340px; 
+    height: 340px; 
+    align-self: start; 
+    margin-top: -2rem;
 }
 
 
-.avatar {
-    position: absolute;
-    z-index: 1;
+.avatar { 
+    position: absolute; 
+    z-index: 1; 
+    
+    width: 200px; 
+    height: 220px; 
 
-    width: 300px;
-    height: 300px;
+    top: 55px; 
+    left: 70px; 
 
-    top: 40px;
-    left: 20px;
-
-    object-fit: cover;
-    border: none;
-    border-radius: var(--radius);
+    object-fit: cover; 
+    border: none; 
+    border-radius: 0;
 }
-
 
 .photo-frame {
     position: absolute;
@@ -110,7 +109,7 @@ h1, .brand {
     width: 340px;
     height: 340px;
 
-    top: 20px;
+    top: 0px;
     left: 0;
 
     object-fit: fill;
@@ -226,10 +225,10 @@ h1, .brand {
 .experience {
     margin-top: 20px;
     padding: 15px;
-    color: var(--text-muted);
-    background-color: var(--accent);
+    color: var(--radius);
+    background-color: var(--text-muted);
     border: 2px solid var(--ink);
-    border-radius: var(--radius);
+    border-radius: var(--accent);
 }
 
 .experience h1 {
@@ -264,10 +263,10 @@ h1, .brand {
 .skill {
     margin-top: 20px;
     padding: 15px;
-    color: var(--text-muted);
-    background-color: var(--accent);
-    border: 2px solid var(--ink);
-    border-radius: var(--radius);
+    color: var(--accent);
+    background-color: var(--text-muted);
+    border: 2px solid var(--radius);
+    border-radius: var(--ink);
 }
 
 .skill h1 {
@@ -298,33 +297,6 @@ h1, .brand {
 }
 
 
-.hero-photo {
-    grid-area: photo;
-    align-self: center;
-    position: relative;
-}
-
-.photo-block {
-    position: absolute;
-    top: 1.25rem;
-    left: 1.25rem;
-    width: 100%;
-    height: 100%;
-    background-color: var(--accent);
-    border-radius: var(--radius);
-    z-index: 0;
-}
-
-.avatar {
-    position: relative;
-    z-index: 1;
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: var(--radius);
-    border: 3px solid var(--ink);
-}
 
 .site-footer {
     padding: 1.5rem;
@@ -354,23 +326,27 @@ h1, .brand {
     }
 }
 
-
-@media (max-width: 600px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "identity"
-            "photo"
-            "details";
+@media (max-width: 600px) { 
+    .hero-photo { 
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
     }
 
-    .hero-photo {
-        max-width: 220px;
+    .avatar {
+        width: 175px;
+        height: 195px;
+        top: 50px;
+        left: 62px;
     }
 
-    .social-links {
-        justify-content: flex-start;
+    .photo-frame {
+        width: 300px;
+        height: 300px;
     }
+
+    .social-links { 
+        justify-content: flex-start; 
+    } 
 }
-
 
