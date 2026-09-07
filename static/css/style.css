@@ -60,34 +60,44 @@ h1, .brand {
     font-size: 0.95rem;
 }
 
-.hero {
-    padding: 4.5rem 0 5rem;
+.hero-photo {
+    grid-area: photo;
+    align-self: start;
+    position: relative;
+    margin-top: -0.5rem;
 }
 
-.hero-grid {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    grid-template-areas:
-        "identity photo"
-        "details  photo";
-    gap: 1.5rem 3rem;
+.photo-block {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    width: 100%;
+    height: 100%;
+    background-color: var(--accent);
+    border-radius: var(--radius);
+    z-index: 0;
 }
 
-.hero-identity {
-    grid-area: identity;
+.avatar {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 3px solid var(--ink);
 }
 
-.hero-details {
-    grid-area: details;
-}
-
-.hero-kicker {
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent-dark);
-    font-weight: 700;
-    margin-bottom: 0.75rem;
+.photo-frame {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
 }
 
 .hero-identity h1 {
@@ -184,6 +194,59 @@ h1, .brand {
     margin-bottom: 8px;
 }
 
+
+.experience {
+    background-color: var(--ink);
+    color: var(--paper);
+}
+
+.experience-item {
+    margin-bottom: 1rem;
+}
+
+.experience-item:last-child {
+    margin-bottom: 0;
+}
+
+.experience-item h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.experience-item h3 span {
+    font-size: 0.8rem;
+    font-weight: normal;
+    white-space: nowrap;
+}
+
+.experience-item p {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.skills {
+    background-color: var(--accent-dark);
+    color: var(--paper);
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.skill {
+    background-color: var(--paper);
+    color: var(--accent);
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
 .hero-photo {
     grid-area: photo;
     align-self: center;
@@ -217,6 +280,27 @@ h1, .brand {
     color: var(--text-muted);
     font-size: 0.85rem;
     border-top: 1px solid var(--line);
+}
+
+@media (max-width: 800px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "identity"
+            "photo"
+            "details";
+        row-gap: 2rem;
+    }
+
+    .hero-photo {
+        max-width: 420px;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .hero-details {
+        margin-top: 0;
+    }
 }
 
 
