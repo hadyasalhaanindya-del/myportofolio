@@ -141,6 +141,34 @@ h1, .brand {
     background-color: var(--accent);
 }
 
+.education {
+    margin-top: 40px;
+    padding: 25px;
+    color: var(--paper);
+    background-color: var(--accent);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+}
+
+.education h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.education h2 {
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+.education h2 span {
+    float: right;
+    font-weight: normal;
+}
+
+.education p {
+    margin-top: 5px;
+}
+
 .hero-photo {
     grid-area: photo;
     align-self: center;
@@ -175,6 +203,7 @@ h1, .brand {
     font-size: 0.85rem;
     border-top: 1px solid var(--line);
 }
+
 
 @media (max-width: 600px) {
     .hero-grid {
