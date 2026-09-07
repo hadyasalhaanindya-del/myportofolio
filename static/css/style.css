@@ -5,24 +5,24 @@
 }
 
 :root {
-    --ink: #1c1917;
-    --paper: #faf6f0;
-    --accent: #ff00a2;
-    --accent-dark: #d3008697;
-    --line: #e3d9c9;
-    --text-muted: #6b6459;
+    --ink: #ea9dae;
+    --paper: #45151b;
+    --accent: #fbde9c;
+    --accent-dark: #f99256;
+    --line: #45151b;
+    --text-muted: #c74e51;
     --radius: 4px;
 }
 
 body {
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, "Space Grotesk", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
     background-color: var(--paper);
     line-height: 1.6;
 }
 
 h1, .brand {
-    font-family: "Space Grotesk", -apple-system, sans-serif;
+    font-family: "Bonbon", -apple-system, sans-serif;
 }
 
 .container {
@@ -95,6 +95,10 @@ h1, .brand {
     line-height: 0.95;
 }
 
+.hadya-font {
+    font-family: "Bonbon", sans-serif;
+}
+
 .bio {
     color: var(--text-muted);
     max-width: 480px;
@@ -142,22 +146,22 @@ h1, .brand {
 }
 
 .education {
-    margin-top: 40px;
-    padding: 25px;
-    color: var(--paper);
+    margin-top: 20px;
+    padding: 15px;
+    color: var(--text-muted);
     background-color: var(--accent);
     border: 2px solid var(--ink);
     border-radius: var(--radius);
 }
 
 .education h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
 }
 
 .education h2 {
-    font-size: 1.1rem;
-    margin-top: 15px;
+    font-size: 0.75rem;
+    margin-top: 8px;
 }
 
 .education h2 span {
@@ -166,7 +170,7 @@ h1, .brand {
 }
 
 .education p {
-    margin-top: 5px;
+    margin-top: 3px;
 }
 
 .hero-photo {
