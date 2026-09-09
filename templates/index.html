@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hadya's Portofolio</title>
+    <title>{{ name }}'s Portofolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bonbon&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -14,9 +14,10 @@
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="#profile" class="brand">Hadya's Portofolio</a>
+            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
             <nav>
-                <a href="#profile">Profile</a>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -28,23 +29,23 @@
         
                     <h1>
                         Hi! I'm<br>
-                        <span class="hadya-font">Hadya</span>
+                        <span class="hadya-font">{{ name }}</span>
                     </h1>
                 </div>
                 <div class="hero-photo">
-                    <img class="avatar" src="{% static 'img/hadya.jpeg' %}" alt="Photo of Hadya">
+                    <img class="avatar" src="{% static 'img/hadya.jpeg' %}" alt="Photo of {{ name }}">
                     <img class="photo-frame" src="{% static 'img/pinkframe.png' %}" alt="Photo frame">
                 </div>
                 <div class="hero-details">
-                    <p class="bio">I'm Hadyasalha Alina Anindya, currently majoring in Information System. Socializing, public speaking, and critical thinking are areas I excel in with confidence. A full-time eager learner of  mathematics, business management, and programming.</p>
+                    <p class="bio">{{ bio }}</p>
                     <dl class="meta-list">
                         <div class="meta-row">
                             <dt>NPM</dt>
-                            <dd>2506620406</dd>
+                            <dd>{{ npm }}</dd>
                         </div>
                         <div class="meta-row">
                             <dt>Major</dt>
-                            <dd>Information System - Undergraduate</dd>
+                            <dd>{{ study_program }}</dd>
                         </div>
                     </dl>
                     <div class="social-links">
@@ -106,7 +107,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 Hadya. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
 </body>
