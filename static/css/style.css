@@ -801,7 +801,7 @@ h1, .brand {
     .social-links { 
         justify-content: flex-start; 
     } 
-
+    /*project buttons*/
     .project-header {
         align-items: flex-start;
         flex-direction: column;
@@ -839,5 +839,84 @@ h1, .brand {
         width: 100%;
         text-align: center;
     }
+
+    /*experience buttons*/
+    .experience-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .experience-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .experience-search {
+        flex-direction: column;
+    }
+
+    .experience-search .button {
+        width: 100%;
+    }
+
+    .experience-delete-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .experience-delete-modal__content {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .experience-delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .experience-delete-modal__actions .button {
+        width: 100%;
+        text-align: center;
+    }
+
+    /*education buttons*/
+    .education-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .education-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .education-search {
+        flex-direction: column;
+    }
+
+    .education-search .button {
+        width: 100%;
+    }
+
+    .education-delete-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .education-delete-modal__content {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .education-delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .education-delete-modal__actions .button {
+        width: 100%;
+        text-align: center;
+    }
+
 }
 
