@@ -10,8 +10,12 @@ class Experience(models.Model):
         ('full-time', 'Full-Time'),
         ('freelance', 'Freelance'),
         ('organisation', 'Organisation'),
-
     ]
+
+    STATUS_CHOICES = [
+            ('on going', 'On Going'),
+            ('finished', 'FINISHED')
+        ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
@@ -20,6 +24,7 @@ class Experience(models.Model):
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='on going')
     def __str__(self):
         return self.title
     
@@ -31,7 +36,11 @@ class Education(models.Model):
     EDUCATION_CHOICES = [
         ('school', 'School'),
         ('university', 'University')
-        
+    ]
+
+    STATUS_CHOICES = [
+        ('on going', 'On Going'),
+        ('finished', 'FINISHED')
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -41,6 +50,7 @@ class Education(models.Model):
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='on going')
     def __str__(self):
         return self.title
     

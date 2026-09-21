@@ -594,6 +594,20 @@ h1, .brand {
     margin-top: 1.5rem;
 }
 
+.education-form {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.5rem;
+}
+
+.education-form {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.5rem;
+}
+
+
+/*general form*/
 .form-group {
     margin-bottom: 1.25rem;
 }
@@ -646,6 +660,100 @@ h1, .brand {
 .button-secondary {
     background: var(--ink);
 }
+
+.dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        /* Sembunyikan select asli, tapi tetap ikut ter-submit */
+        .dropdown select {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            width: 0;
+        }
+
+        .dropdown-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 18px;
+            background: white;
+            color: #b42318;
+            font: inherit;
+            text-align: left;
+            border: 1.5px solid #c74e51;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .dropdown-toggle:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px #b42318;
+        }
+
+        .dropdown-arrow {
+            width: 0;
+            height: 0;
+            flex: none;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #c74e51;
+            transition: transform .2s ease;
+        }
+
+        .dropdown.is-open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            right: 0;
+            margin: 0;
+            padding: 8px;
+            list-style: none;
+            background: white;
+            border: 1px solid #ea9dae;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px #b42318;
+            max-height: 260px;
+            overflow-y: auto;
+            z-index: 10;
+
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px);
+            transition: opacity .18s ease, transform .18s ease, visibility .18s;
+        }
+
+        .dropdown.is-open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-option {
+            padding: 14px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background .15s ease;
+        }
+
+        .dropdown-option:hover {
+            background: #fbde9c;
+        }
+
+        .dropdown-option[aria-selected="true"] {
+            background: #fbde9c;
+            color: #c74e51;
+            font-weight: 500;
+        }
 
 
 
