@@ -29,11 +29,11 @@ def show_main(request):
 def show_experience(request):
     json_response = get_experience_json(request)
     
-    experience = serializers.deserialize(
+    experiences = serializers.deserialize(
             "json",
             json_response.content.decode("utf-8"),
         )
-    experience = [experience.object for experiences in experience]
+    experiences = [experience.object for experience in experiences]
     title_query = request.GET.get("title", "").strip()
     
     context = {
@@ -46,11 +46,11 @@ def show_experience(request):
 def show_education(request):
     json_response = get_education_json(request)
 
-    education = serializers.deserialize(
+    educations = serializers.deserialize(
         "json",
         json_response.content.decode("utf-8"),
     )
-    education = [education.object for educations in education]
+    educations = [education.object for education in educations]
     title_query = request.GET.get("title", "").strip()
 
     context = {
@@ -135,6 +135,28 @@ def get_projects_json(request):
     projects_json = serializers.serialize("json", projects)
     return HttpResponse(projects_json, content_type="application/json")
 
+def get_experience_json(request):
+    title_query = request.GET.get("title", "").strip()
+    experiences = Experience.objects.all()
+
+    if title_query:
+        experiences = experiences.filter(title__icontains=title_query)
+
+    experience_json = serializers.serialize("json", experiences)
+    return HttpResponse(experience_json, content_type="application/json")
+
+def get_education_json(request):
+    title_query = request.GET.get("title", "").strip()
+    educations = Education.objects.all()
+
+    if title_query:
+        educations = educations.filter(title__icontains=title_query)
+
+    projects_json = serializers.serialize("json", educations)
+    return HttpResponse(education_json, content_type="application/json")
+
+
+#delete
 def delete_project(request, project_id):
     project = get_object_or_404(Project, pk=project_id)
 
