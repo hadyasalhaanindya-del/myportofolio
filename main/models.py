@@ -9,18 +9,64 @@ class Experience(models.Model):
         ('part-time', 'Part-Time'),
         ('full-time', 'Full-Time'),
         ('freelance', 'Freelance'),
+        ('organization', 'Organization'),
     ]
+
+    STATUS_CHOICES = [
+            ('on going', 'On Going'),
+            ('finished', 'Finished')
+        ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
+    category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='Full-Time')
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On Going')
     def __str__(self):
         return self.title
     
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+class Education(models.Model):
+    EDUCATION_CHOICES = [
+        ('school', 'School'),
+        ('university', 'University')
+    ]
+
+    STATUS_CHOICES = [
+        ('on going', 'On Going'),
+        ('finished', 'Finished')
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    category = models.CharField(max_length=20, choices=EDUCATION_CHOICES, default='School')
+    thumbnail = models.URLField(blank=True, null=True)
+    started_at = models.DateTimeField(auto_now_add=True)
+    ended_at = models.DateTimeField(blank=True, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On Going')
+    def __str__(self):
+        return self.title
+    
+    @property
+    def is_ongoing(self):
+        return self.ended_at is None
+
+class Project(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    tech_stack = models.CharField(max_length=255)
+    project_url = models.URLField(blank=True)
+    project_image_url = models.URLField(blank=True, max_length=500)
+
+    def __str__(self):
+        return self.title
+
+    
