@@ -14,17 +14,17 @@ class Experience(models.Model):
 
     STATUS_CHOICES = [
             ('on going', 'On Going'),
-            ('finished', 'FINISHED')
+            ('finished', 'Finished')
         ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
+    category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='Full-Time')
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='on going')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On Going')
     def __str__(self):
         return self.title
     
@@ -40,17 +40,17 @@ class Education(models.Model):
 
     STATUS_CHOICES = [
         ('on going', 'On Going'),
-        ('finished', 'FINISHED')
+        ('finished', 'Finished')
     ]
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    category = models.CharField(max_length=20, choices=EDUCATION_CHOICES, default='school')
+    category = models.CharField(max_length=20, choices=EDUCATION_CHOICES, default='School')
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='on going')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On Going')
     def __str__(self):
         return self.title
     

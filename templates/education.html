@@ -39,6 +39,9 @@
                             <span class="experience-status">{{ education.get_status_display }}</span>
                             <p class="experience-description">{{ education.description }}</p>
                             <div class="project-card-actions">
+                                <div class="project-actions">
+                                    {% include "components/education_delete_modal.html" with education=education %}
+                                </div>
                             </div>
                         </article>
                     {% empty %}
