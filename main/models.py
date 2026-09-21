@@ -9,7 +9,7 @@ class Experience(models.Model):
         ('part-time', 'Part-Time'),
         ('full-time', 'Full-Time'),
         ('freelance', 'Freelance'),
-        ('organisation', 'Organisation'),
+        ('organization', 'Organization'),
     ]
 
     STATUS_CHOICES = [
