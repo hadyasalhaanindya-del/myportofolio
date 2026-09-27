@@ -6,6 +6,10 @@ from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse
 
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.shortcuts import redirect, render
+
 from main.models import Experience, Education, Project
 from main.forms import ProjectForm, EducationForm, ExperienceForm
 
@@ -186,3 +190,18 @@ def delete_education(request, education_id):
         return redirect("main:show_education")
 
     return redirect("main:show_education")
+
+#register
+def register(request):
+    form = UserCreationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Akun berhasil dibuat. Silakan login.")
+        return redirect("main:login")
+
+    context = {
+        "name": "Burhan",
+        "form": form,
+    }
+    return render(request, "register.html", context)
