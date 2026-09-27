@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.core import serializers
 from django.http import HttpResponse
+import datetime
 
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -26,6 +27,7 @@ def show_main(request):
             "A full-time eager learner of  mathematics, business management, and programming. "
             
         ),
+        "last_login": last_login,
     }
     return render(request, "index.html", context)
 
@@ -198,10 +200,34 @@ def register(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, "Akun berhasil dibuat. Silakan login.")
-        return redirect("main:login")
+        return redirect("main:login_user")
 
     context = {
-        "name": "Burhan",
+        "name": "Hadya",
         "form": form,
     }
     return render(request, "register.html", context)
+
+#login
+def login_user(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        response = redirect("main:show_main")
+        response.set_cookie('last_login', datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        return response
+
+    context = {
+        "name": "Hadya",
+        "form": form,
+    }
+    return render(request, "login.html", context)
+
+#logout
+def logout_user(request):
+    logout(request)
+    response = redirect("main:show_main")
+    response.delete_cookie('last_login')
+    return response
