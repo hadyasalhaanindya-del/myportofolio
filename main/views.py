@@ -10,6 +10,8 @@ import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required  
+from django.core.exceptions import PermissionDenied       
 
 from main.models import Experience, Education, Project
 from main.forms import ProjectForm, EducationForm, ExperienceForm
@@ -17,6 +19,7 @@ from main.forms import ProjectForm, EducationForm, ExperienceForm
 
 
 def show_main(request):
+    last_login = request.COOKIES.get('last_login', 'Belum ada sesi login / Cookie tidak ditemukan')
     context = {
         "name": "Hadya",
         "npm": "2506620406",
@@ -86,6 +89,7 @@ def show_project(request):
 
 #create
 
+@login_required(login_url="/login/")
 def create_project(request):
     form = ProjectForm(request.POST or None)
 
