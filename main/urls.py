@@ -1,7 +1,7 @@
 from django.urls import path
 from django.http import HttpResponse
 
-from main.views import show_main, show_experience, show_education, show_project, create_project, get_projects_json, delete_project, delete_education, delete_experience, create_experience, create_education, get_education_json, get_experience_json, login_user, logout_user, register
+from main.views import show_main, show_experience, show_education, show_project, create_project, get_projects_json, delete_project, delete_education, delete_experience, create_experience, create_education, get_education_json, get_experience_json, login_user, logout_user, register, toggle_star
 
 
 app_name = "main"
@@ -22,5 +22,6 @@ urlpatterns = [
     path("experience/<uuid:experience_id>/delete/",delete_experience,name="delete_experience"),
     path('login/', login_user, name='login_user'),
     path('logout/', logout_user, name='logout_user'),
-    path('register/', register, name='register')
+    path('register/', register, name='register'),
+    path("projects/<uuid:project_id>/star/", toggle_star, name="toggle_star"),
 ]

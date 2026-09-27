@@ -102,6 +102,10 @@ def create_project(request):
         "name": "Hadya",
         "form": form,
     }
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    form = ProjectForm(request.POST or None)
     return render(request, "projects_form.html", context)
 
 def create_education(request):
@@ -235,3 +239,16 @@ def logout_user(request):
     response = redirect("main:show_main")
     response.delete_cookie('last_login')
     return response
+
+#star
+@login_required(login_url="/login/")
+def toggle_star(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+
+    if request.method == "POST":
+        if request.user in project.starred_by.all():
+            project.starred_by.remove(request.user)
+        else:
+            project.starred_by.add(request.user)
+
+    return redirect("main:show_projects")
