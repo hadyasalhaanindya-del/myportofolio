@@ -60,6 +60,13 @@
                                     {% endif %}
                                     {% include "components/project_star.html" with project=project %}
                                     {% if user.is_superuser %}
+                                        <button type="button"
+                                                class="button project-add-button"
+                                                popovertarget="add-project-modal">
+                                            <span aria-hidden="true">+</span>
+                                            Tambah Proyek
+                                        </button>
+                                        {% include "components/project_form_modal.html" %}
                                         {% include "components/project_delete_modal.html" with project=project %}
                                     {% endif %}
                                 </div>
@@ -166,6 +173,10 @@
 
         articleElement.innerHTML = completeCardHtml;
         return articleElement;
+    }
+
+    function closeProjectModal() {
+        document.getElementById("add-project-modal").hidePopover();
     }
 
     // Fetch data project
