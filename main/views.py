@@ -171,24 +171,61 @@ def get_projects_json(request):
 
 def get_experience_json(request):
     title_query = request.GET.get("title", "").strip()
-    experiences = Experience.objects.all()
+    experiences = Experience.objects.prefetch_related('starred_by').all()
 
     if title_query:
         experiences = experiences.filter(title__icontains=title_query)
 
-    experience_json = serializers.serialize("json", experiences)
-    return HttpResponse(experience_json, content_type="application/json")
+    # Konstruksi data JSON secara manual agar bisa menyisipkan logika Star
+    data = []
+    for experience in experiences:
+        starred_users = experience.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+
+        data.append({
+            "pk": str(experience.id),
+            "fields": {
+                "title": experience.title,
+                "description": experience.description,
+                "category": experience.category,
+                "experience_thumbnail": experience.thumbnail,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+
+    return JsonResponse(data, safe=False)
 
 def get_education_json(request):
     title_query = request.GET.get("title", "").strip()
-    educations = Education.objects.all()
-
+    educations = Education.objects.prefetch_related('starred_by').all()
+    
     if title_query:
-        educations = educations.filter(title__icontains=title_query)
-
-    education_json = serializers.serialize("json", educations)
-    return HttpResponse(education_json, content_type="application/json")
-
+        educations = eduucations.filter(title__icontains=title_query)
+    
+        # Konstruksi data JSON secara manual agar bisa menyisipkan logika Star
+        data = []
+        for education in educations:
+            starred_users = education.starred_by.all()
+            is_starred = request.user in starred_users if request.user.is_authenticated else False
+            starred_by_names = ", ".join([u.username for u in starred_users])
+    
+            data.append({
+                "pk": str(education.id),
+                "fields": {
+                    "title": education.title,
+                    "description": education.description,
+                    "category": education.category,
+                    "education_thumbnail": education.thumbnail,
+                    "star_count": starred_users.count(),
+                    "is_starred": is_starred,
+                    "starred_by_names": starred_by_names,
+                }
+            })
+    
+    return JsonResponse(data, safe=False)
 
 #delete
 def delete_project(request, project_id):
