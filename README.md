@@ -31,3 +31,15 @@ https://chatgpt.com/s/t_6aa81b8648488191b2c13432f4b4ae96
 2. JSON lebih ringkas dan mudah dibaca daripada XML.
 
 3. Browser mengirim request http ke url tertentu. Lalu, urls.py mencocokan dengan request yang dikirim ke view yang sesuai. View mengambil data dari folder portofolio dengan model django. Data dari model django dikirim sebagai json, makanya diperlukan serialization, untuk mengubah jdon menjadi dictionary. Setelah serialization, data dikirim ke browser (berbentuk json) dan memproses data untuk ditampilkan.
+
+#Tugas 4
+
+#Tugas 5
+Tidak menggunakan AI, hanya mengikuti template
+
+1. Debouncing = teknik menunda eksekusi fungsi sampai user berhenti mengetik sampai waktu tertentu. Digunakan agar program tidak terus berjalan tiap user mengetik, baru jalan saatuser selesai sehingga lebih efisien dan tidak memberatkan server.
+
+2. Untuk menunggu proses request selesai sebelum kode lanjut ke baris selanjutnya. Jika tidak menggunakan await, hasil fetch() masih berupa Promise, jadi daya response belum bisa digunakan dan bisa error.
+
+3. Attack dengan memasukan script berbahaya ke halaman web. Data yang ditampilkan melalui ajax/javascript lebih rentan karena developer bisa memasukannya langsung ke DOM. Django template secara default menggunakan auto-escaping.
+
