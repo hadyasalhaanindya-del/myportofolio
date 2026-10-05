@@ -12,11 +12,13 @@
                         Test Toast Notifikasi
                     </button>
                     <h1>Experiences</h1>
+                    {% if user.is_superuser %}
                     <a href="{% url 'main:create_experience' %}"
                        class="button project-add-button">
                         <span aria-hidden="true">+</span>
                         Add Experience
                     </a>
+                    {% endif %}
                 </div>
                 <form method="get"
                       action="{% url 'main:show_experience' %}"
@@ -53,7 +55,15 @@
                             <p class="experience-description">{{ experience.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
+                                    {% if user.is_superuser %}
+                                        <button type="button"
+                                                class="button project-add-button"
+                                                popovertarget="add-project-modal">
+                                            <span aria-hidden="true">+</span>
+                                            Add Experience
+                                        </button>
                                     {% include "components/experience_delete_modal.html" with experience=experience %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>
@@ -69,6 +79,9 @@
         </section>
     </main>
 {% endblock content %}
+{% if user.is_superuser %}
+    {% include "components/project_form_modal.html" %}
+{% endif %}
 
 <script>
     // Konfigurasi

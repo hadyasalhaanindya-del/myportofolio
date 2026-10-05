@@ -79,6 +79,9 @@
         </section>
     </main>
 {% endblock content %}
+{% if user.is_superuser %}
+    {% include "components/education_form_modal.html" %}
+{% endif %}
 
 <script>
     // Konfigurasi

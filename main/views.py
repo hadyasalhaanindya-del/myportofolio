@@ -48,6 +48,7 @@ def show_experience(request):
             "name": "Hadya",
             "experience_list": Experience.objects.all(),
             "title_query": title_query,
+            "form": ExperienceForm(),
         }
     return render(request, "experience.html", context)
 
@@ -65,6 +66,7 @@ def show_education(request):
         "name": "Hadya",
         "education_list": Education.objects.all(),
         "title_query": title_query,
+        "form": EducationForm(),
     }
     return render(request, "education.html", context)
 
@@ -203,7 +205,7 @@ def get_education_json(request):
     educations = Education.objects.prefetch_related('starred_by').all()
     
     if title_query:
-        educations = eduucations.filter(title__icontains=title_query)
+        educations = educations.filter(title__icontains=title_query)
     
         # Konstruksi data JSON secara manual agar bisa menyisipkan logika Star
         data = []
@@ -323,6 +325,42 @@ def create_project_ajax(request):
         project = form.save()
         return JsonResponse(
             {"message": "Proyek berhasil ditambahkan.", "pk": str(project.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+@require_POST
+def create_education_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan education."},
+            status=403,
+        )
+
+    form = EducationForm(request.POST)
+    if form.is_valid():
+        education = form.save()
+        return JsonResponse(
+            {"message": "Education berhasil ditambahkan.", "pk": str(education.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
+
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan experience."},
+            status=403,
+        )
+
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "Proyek berhasil ditambahkan.", "pk": str(experience.id)},
             status=201,
         )
 
