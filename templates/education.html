@@ -11,12 +11,14 @@
                     <button class="button button-secondary" onclick="showToast('Notifikasi Sistem', 'Education berhasil dimuat dengan baik!', 'success')">
                         Test Toast Notifikasi
                     </button>
+                    {% if user.is_superuser %}
                     <h1>Educations</h1>
                     <a href="{% url 'main:create_education' %}"
                        class="button project-add-button">
                         <span aria-hidden="true">+</span>
                         Add Education
                     </a>
+                    {% endif %}
                 </div>
                 <form method="get"
                       action="{% url 'main:show_education' %}"
@@ -53,7 +55,15 @@
                             <p class="experience-description">{{ education.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
+                                    {% if user.is_superuser %}
+                                        <button type="button"
+                                                class="button project-add-button"
+                                                popovertarget="add-project-modal">
+                                            <span aria-hidden="true">+</span>
+                                            Add Experience
+                                        </button>
                                     {% include "components/education_delete_modal.html" with education=education %}
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>
