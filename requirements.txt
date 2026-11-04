@@ -5,3 +5,4 @@ python-dotenv
 whitenoise
 requests
 urllib3
+djangorestframework~=3.18.3
