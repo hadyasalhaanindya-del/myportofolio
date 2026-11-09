@@ -1,11 +1,47 @@
 [
 {
   "model": "main.experience",
+  "pk": "69115024-59df-484d-8c9a-e4a64152bff1",
+  "fields": {
+    "title": "COMPFEST 18",
+    "description": "Stage Staff, Event Division",
+    "category": "part-time",
+    "thumbnail": null,
+    "started_at": "2026-09-14T08:38:05.179Z",
+    "ended_at": null
+  }
+},
+{
+  "model": "main.experience",
+  "pk": "84d7deba-9e04-4b3d-ae7b-c25b3ac07210",
+  "fields": {
+    "title": "Open House Fasilkom UI 2025",
+    "description": "Public Relation Staff",
+    "category": "part-time",
+    "thumbnail": null,
+    "started_at": "2026-09-14T08:40:07.323Z",
+    "ended_at": "2025-12-01T00:00:00Z"
+  }
+},
+{
+  "model": "main.experience",
+  "pk": "af927889-3bc6-4be0-b8e5-1806ddfe0bdb",
+  "fields": {
+    "title": "Palang Merah Remaja",
+    "description": "Head",
+    "category": "organization",
+    "thumbnail": null,
+    "started_at": "2026-09-14T08:41:17.924Z",
+    "ended_at": "2024-10-01T00:00:00Z"
+  }
+},
+{
+  "model": "main.experience",
   "pk": "c4a31c50-6565-4435-a6a0-48cd6308c58b",
   "fields": {
     "title": "Digital Marketing Staff, BEM Fasilkom UI",
     "description": "Seeking clients, responsible for social media",
-    "category": "part-time",
+    "category": "organization",
     "thumbnail": null,
     "started_at": "2026-09-09T09:37:42.780Z",
     "ended_at": null

@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block meta %}
+    <title>Educations - {{ name }}</title>
+{% endblock meta %}
+{% block content %}
+    <main>
+        <section class="experience-section" id="experience">
+            <div class="container">
+                <p class="section-kicker">Education I received</p>
+                <div class="project-header">
+                    <button class="button button-secondary" onclick="showToast('Notifikasi Sistem', 'Education berhasil dimuat dengan baik!', 'success')">
+                        Test Toast Notifikasi
+                    </button>
+                    <h1>Educations</h1>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'main:create_education' %}"
+                       class="button project-add-button">
+                        <span aria-hidden="true">+</span>
+                        Add Education
+                    </a>
+                    {% endif %}
+                </div>
+                <form method="get"
+                      action="{% url 'main:show_education' %}"
+                      class="experience-search"
+                      id="education-search-form">
+                    <input type="search"
+                           name="title"
+                           id="search-input"
+                           value="{{ title_query }}"
+                           placeholder="Search by education title"
+                           class="project-search__input"
+                           aria-label="Search by education title">
+                    <button type="submit" class="button">Search</button>
+                </form>
+                <div id="loading" class="empty-state hide">
+                    <p>Memuat educations...</p>
+                </div>
+                <div id="error" class="empty-state hide">
+                    <p>Gagal memuat data educations. Silakan coba lagi.</p>
+                </div>
+                <div id="empty" class="empty-state hide">
+                    <p>Belum ada education yang ditambahkan atau ditemukan.</p>
+                </div>
+                <div id="grid" class="experience-grid project-grid hide"></div>
+                <div class="experience-grid project-grid">
+                    {% for education in education_list %}
+                        <article class="experience-card">
+                            {% if education.thumbnail %}
+                                <img src="{{ education.thumbnail }}"
+                                     alt="Image {{ education.title }}"
+                                     class="project-image">
+                            {% endif %}
+                            <h2>{{ education.title }}</h2>
+                            <span class="experience-category">{{ education.get_category_display }}</span>
+                            <span class="experience-status">{{ education.get_status_display }}</span>
+                            <p class="experience-description">{{ education.description }}</p>
+                            <div class="project-card-actions">
+                                <div class="project-actions">
+                                    {% if user.is_superuser %}
+                                        <button type="button"
+                                                class="button project-add-button"
+                                                popovertarget="add-project-modal">
+                                            <span aria-hidden="true">+</span>
+                                            Add Education
+                                        </button>
+                                    {% include "components/education_delete_modal.html" with education=education %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% empty %}
+                        {% if title_query %}
+                            <p class="empty-state">No education found with that title.</p>
+                        {% else %}
+                            <p class="empty-state">No education added.</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+{% if user.is_superuser %}
+    {% include "components/education_form_modal.html" %}
+{% endif %}
+
+{% csrf_token %}
+<script>
+const BASE_EDUCATIONS_ENDPOINT = "{% url 'api:education-list' %}";
+const DETAIL_EDUCATION_ENDPOINT = "{% url 'api:education-detail' '00000000-0000-0000-0000-000000000000' %}";
+const STAR_EDUCATION_ENDPOINT = "{% url 'api:education-star' '00000000-0000-0000-0000-000000000000' %}";
+const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+const IS_AUTHENTICATED = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
+
+const loadingState = document.getElementById('loading');
+const errorState = document.getElementById('error');
+const emptyState = document.getElementById('empty');
+const gridContainer = document.getElementById('grid');
+const searchForm = document.getElementById('education-search-form');
+const searchInput = document.getElementById('search-input');
+const educationForm = document.getElementById('education-form') || document.getElementById('project-form');
+let educationsAbortController;
+let searchDebounceTimer;
+
+function getCookie(name) {
+    const prefix = `${name}=`;
+    const cookie = document.cookie.split(';').map(value => value.trim())
+        .find(value => value.startsWith(prefix));
+    return cookie ? decodeURIComponent(cookie.slice(prefix.length)) : null;
+}
+
+function escapeHtml(value) {
+    return String(value ?? '').replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+}
+
+function educationEndpoint(pattern, id) {
+    return pattern.replace('00000000-0000-0000-0000-000000000000', id);
+}
+
+function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+    loadingState.classList.toggle('hide', !showLoading);
+    errorState.classList.toggle('hide', !showError);
+    emptyState.classList.toggle('hide', !showEmpty);
+    gridContainer.classList.toggle('hide', !showGrid);
+}
+
+function buildEducationCardElement(education) {
+    const article = document.createElement('article');
+    article.className = 'experience-card';
+    const image = education.thumbnail
+        ? `<img src="${escapeHtml(education.thumbnail)}" alt="${escapeHtml(education.title)}" class="project-image">` : '';
+    const star = IS_AUTHENTICATED
+        ? `<button type="button" class="button button-star${education.is_starred ? ' is-starred' : ''}"
+            data-action="star" data-id="${escapeHtml(education.id)}"
+            title="${escapeHtml(education.starred_by_names)}">
+            ${education.is_starred ? 'Unstar' : 'Star'} (${education.star_count})</button>`
+        : `<a href="{% url 'main:login' %}" class="button">Login to star (${education.star_count})</a>`;
+    const remove = IS_SUPERUSER
+        ? `<button type="button" class="button button-danger" data-action="delete"
+            data-id="${escapeHtml(education.id)}">Delete</button>` : '';
+    article.innerHTML = `${image}<h2>${escapeHtml(education.title)}</h2>
+        <span class="experience-category">${escapeHtml(education.category)}</span>
+        <span class="experience-status">${escapeHtml(education.status)}</span>
+        <p class="experience-description">${escapeHtml(education.description)}</p>
+        <div class="project-card-actions"><div class="project-actions">
+        ${star}${remove}</div></div>`;
+    return article;
+}
+
+async function fetchEducations(searchQuery = '') {
+    if (educationsAbortController) educationsAbortController.abort();
+    educationsAbortController = new AbortController();
+    try {
+        displayPageSection({ showLoading: true });
+        const url = new URL(BASE_EDUCATIONS_ENDPOINT, window.location.origin);
+        if (searchQuery) url.searchParams.set('title', searchQuery);
+        const response = await fetch(url, {
+            headers: { Accept: 'application/json' },
+            signal: educationsAbortController.signal,
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const educations = await response.json();
+        gridContainer.replaceChildren(...educations.map(buildEducationCardElement));
+        displayPageSection({ showGrid: educations.length > 0, showEmpty: educations.length === 0 });
+    } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error(error);
+        displayPageSection({ showError: true });
+    }
+}
+
+function apiErrorMessage(data, status) {
+    const messages = Object.values(data).flat().filter(value => typeof value === 'string');
+    return messages.join(' ') || `Request failed (HTTP ${status}).`;
+}
+
+async function writeEducation(url, method, payload) {
+    const response = await fetch(url, {
+        method,
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: payload === undefined ? undefined : JSON.stringify(payload),
+    });
+    if (response.status === 204) return null;
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(apiErrorMessage(data, response.status));
+    return data;
+}
+
+async function addEducation(event) {
+    event.preventDefault();
+    const button = educationForm.querySelector('button[type="submit"]');
+    button.disabled = true;
+    try {
+        const fields = new FormData(educationForm);
+        const payload = Object.fromEntries([
+            'title', 'description', 'category', 'status', 'thumbnail',
+        ].map(name => [name, fields.get(name)]));
+        await writeEducation(BASE_EDUCATIONS_ENDPOINT, 'POST', payload);
+        educationForm.reset();
+        const modal = document.getElementById('add-education-modal') || document.getElementById('add-project-modal');
+        if (modal && modal.hidePopover) modal.hidePopover();
+        showToast('Success', 'Education created.', 'success');
+        await fetchEducations(searchInput.value.trim());
+    } catch (error) {
+        showToast('Could not create education', error.message, 'error');
+    } finally {
+        button.disabled = false;
+    }
+}
+
+if (educationForm) educationForm.addEventListener('submit', addEducation);
+
+gridContainer.addEventListener('click', async function(event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button || button.disabled) return;
+    const action = button.dataset.action;
+    if (action === 'delete' && !window.confirm('Delete this education?')) return;
+    button.disabled = true;
+    try {
+        const pattern = action === 'star' ? STAR_EDUCATION_ENDPOINT : DETAIL_EDUCATION_ENDPOINT;
+        await writeEducation(educationEndpoint(pattern, button.dataset.id),
+            action === 'star' ? 'POST' : 'DELETE');
+        showToast('Success', action === 'star' ? 'Star updated.' : 'Education deleted.', 'success');
+        await fetchEducations(searchInput.value.trim());
+    } catch (error) {
+        showToast('Request failed', error.message, 'error');
+    } finally {
+        button.disabled = false;
+    }
+});
+
+searchInput.addEventListener('input', function() {
+    clearTimeout(searchDebounceTimer);
+    searchDebounceTimer = setTimeout(() =>
+        fetchEducations(searchInput.value.trim()), 300);
+});
+
+searchForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    clearTimeout(searchDebounceTimer);
+    fetchEducations(searchInput.value.trim());
+});
+
+fetchEducations(searchInput.value.trim());
+</script>
+{% endblock content %}
