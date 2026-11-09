@@ -34,6 +34,13 @@ class Experience(models.Model):
     def is_ongoing(self):
         return self.ended_at is None
 
+    def save(self, *args, **kwargs):
+        if self.ended_at is not None:
+            self.status = 'finished'
+        else:
+            self.status = 'on going'
+        super().save(*args, **kwargs)
+
 class Education(models.Model):
     EDUCATION_CHOICES = [
         ('school', 'School'),
@@ -59,6 +66,13 @@ class Education(models.Model):
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+    def save(self, *args, **kwargs):
+        if self.ended_at is not None:
+            self.status = 'finished'
+        else:
+            self.status = 'on going'
+        super().save(*args, **kwargs)
 
 class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
