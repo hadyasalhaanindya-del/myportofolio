@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from main.models import Project, Experience
+from main.models import Project, Experience, Education
 
 
 class ProjectAPITest(APITestCase):
@@ -316,3 +316,130 @@ class ExperienceAPITest(APITestCase):
         response = self.client.post(self.star_url)
         self.assertFalse(response.data["is_starred"])
         self.assertEqual(response.data["star_count"], 0)
+
+
+class EducationAPITest(APITestCase):
+    def setUp(self):
+        self.owner = User.objects.create_superuser(
+            username="owner_edu",
+            password="test-password",
+            email="owner_edu@example.com",
+        )
+        self.visitor = User.objects.create_user(
+            username="visitor_edu",
+            password="test-password",
+        )
+        self.editor = User.objects.create_user(
+            username="editor_edu",
+            password="test-password",
+        )
+        editor_group, _ = Group.objects.get_or_create(name="Editor")
+        self.editor.groups.add(editor_group)
+
+        self.education = Education.objects.create(
+            title="University of Indonesia",
+            description="Studying Computer Science",
+            category="university",
+            status="on going",
+        )
+        self.list_url = reverse("api:education-list")
+        self.detail_url = reverse("api:education-detail", args=[self.education.id])
+        self.star_url = reverse("api:education-star", args=[self.education.id])
+        self.payload = {
+            "title": "High School 1",
+            "description": "Graduated in Science",
+            "category": "school",
+            "status": "finished",
+            "thumbnail": "https://example.com/school.png",
+        }
+
+    def test_public_list_and_detail(self):
+        response = self.client.get(self.list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]["id"], str(self.education.id))
+        self.assertFalse(response.data[0]["is_starred"])
+        self.assertEqual(
+            self.client.get(self.detail_url).status_code, status.HTTP_200_OK
+        )
+
+    def test_search_and_empty_results(self):
+        response = self.client.get(self.list_url, {"title": "University"})
+        self.assertEqual(len(response.data), 1)
+        response = self.client.get(self.list_url, {"title": "nonexistent"})
+        self.assertEqual(response.data, [])
+
+    def test_missing_education(self):
+        url = reverse("api:education-detail", args=[uuid.uuid4()])
+        self.assertEqual(
+            self.client.get(url).status_code, status.HTTP_404_NOT_FOUND
+        )
+
+    def test_guest_and_visitor_cannot_write(self):
+        for user in (None, self.visitor):
+            self.client.force_authenticate(user=user)
+            self.assertEqual(
+                self.client.post(
+                    self.list_url, self.payload, format="json"
+                ).status_code,
+                403,
+            )
+            self.assertEqual(
+                self.client.patch(
+                    self.detail_url, {"title": "Changed"}, format="json"
+                ).status_code,
+                403,
+            )
+            self.assertEqual(
+                self.client.delete(self.detail_url).status_code, 403
+            )
+
+    def test_editor_can_patch_but_cannot_create_or_delete(self):
+        self.client.force_authenticate(user=self.editor)
+        # Editor can PATCH
+        response = self.client.patch(
+            self.detail_url, {"title": "Updated School Title"}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.education.refresh_from_db()
+        self.assertEqual(self.education.title, "Updated School Title")
+
+        # Editor cannot POST (create)
+        self.assertEqual(
+            self.client.post(self.list_url, self.payload, format="json").status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+        # Editor cannot DELETE
+        self.assertEqual(
+            self.client.delete(self.detail_url).status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+
+    def test_owner_can_create_patch_and_delete(self):
+        self.client.force_authenticate(user=self.owner)
+        response = self.client.post(self.list_url, self.payload, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_id = response.data["id"]
+        self.assertTrue(Education.objects.filter(pk=new_id).exists())
+
+        detail_url = reverse("api:education-detail", args=[new_id])
+        response = self.client.patch(detail_url, {"title": "Changed by Owner"}, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.delete(detail_url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Education.objects.filter(pk=new_id).exists())
+
+    def test_star_requires_login_and_toggles(self):
+        self.assertEqual(
+            self.client.post(self.star_url).status_code,
+            status.HTTP_403_FORBIDDEN,
+        )
+        self.client.force_authenticate(user=self.visitor)
+        response = self.client.post(self.star_url)
+        self.assertTrue(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 1)
+        response = self.client.post(self.star_url)
+        self.assertFalse(response.data["is_starred"])
+        self.assertEqual(response.data["star_count"], 0)
+

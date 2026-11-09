@@ -63,6 +63,9 @@ class Education(models.Model):
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='On Going')
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_educations", blank=True
+    )
     def __str__(self):
         return self.title
     
